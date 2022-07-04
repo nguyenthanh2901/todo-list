@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import status from '../../constants/status';
+import Item from './Item';
 import './list.scss'
 class List extends Component {
     constructor(props) {
@@ -7,23 +7,16 @@ class List extends Component {
     }
     render() {
         const { todos } = this.props;
-        // console.log('todos', todos);
         return (
             <>
                 <ul>
                     {todos.map((todo, key) => {
-                        return (
-                            <li key={key} className='todo-item'>
-                                <div className='todo-content'>{todo.name}</div>
-                                <div className={`todo-status ${status.getClass(todo.status)}`}>{status.getDisplayName(todo.status)}</div>
-                                <div className='todo-action'>
-                                    <a className='todo-edit'>Edit</a>
-                                    <a className='todo-delete'>Success</a>
-                                </div>
-                            </li>
-                        )
+                        return <Item
+                            todo={todo}
+                            key={key}
+                            handlePrepareEdit={this.props.handlePrepareEdit}
+                        />
                     }
-
                     )}
                 </ul>
             </>
