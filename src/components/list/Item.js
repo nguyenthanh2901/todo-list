@@ -9,7 +9,12 @@ class Item extends Component {
         return (
             <li className='todo-item'>
                 <div className='todo-content'>{todo.name}</div>
-                <div className={`todo-status ${status.getClass(todo.status)}`}>{status.getDisplayName(todo.status)}</div>
+                <div
+                    className={`todo-status ${status.getClass(todo.status)}`}
+                    onClick={(e) => this.props.handleShowContextMenu(e, todo)}
+                >
+                    {status.getDisplayName(todo.status)}
+                </div>
                 <div className='todo-action'>
                     <button
                         className='todo-edit'
@@ -17,7 +22,12 @@ class Item extends Component {
                     >
                         Edit
                     </button>
-                    <button className='todo-delete'>Delete</button>
+                    <button
+                        className='todo-delete'
+                        onClick={(e) => this.props.handleDelete(todo.id)}
+                    >
+                        Delete
+                    </button>
                 </div>
             </li>
 

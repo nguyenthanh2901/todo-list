@@ -9,6 +9,7 @@ class App extends Component {
     super(props);
     this.handleSaveTodo = this.handleSaveTodo.bind(this);
     this.handlePrepareEdit = this.handlePrepareEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   initTodo = { id: undefined, name: '', status: undefined }
@@ -49,6 +50,11 @@ class App extends Component {
     })
   }
 
+  handleDelete(id) {
+    todoApi.delete(id);
+    this.renderData();
+  }
+
   render() {
     // console.log(this.state);
     return (
@@ -63,6 +69,8 @@ class App extends Component {
           <List
             todos={this.state.todos}
             handlePrepareEdit={this.handlePrepareEdit}
+            handleDelete={this.handleDelete}
+            handleSaveTodo={this.handleSaveTodo}
           />
         </div>
       </div>

@@ -46,6 +46,12 @@ class todoApi {
             return todo;
         }
     }
+
+    delete(id){
+        const newTodos = this.todos.filter((oldTodo) => oldTodo.id !== id);
+        this.todos = newTodos;
+        return true;
+    }
 }
 
 export default new todoApi();
