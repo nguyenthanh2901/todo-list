@@ -1,84 +1,74 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import todoApi from './api/todoApi';
 import './app.scss'
 import Form from './components/form/Form';
 import List from './components/list/List';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSaveTodo = this.handleSaveTodo.bind(this);
-    this.handlePrepareEdit = this.handlePrepareEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+const App = () => {
 
-  initTodo = { id: undefined, name: '', status: undefined }
-  state = {
-    todos: [this.initTodo],
-    todo: this.initTodo
-  }
 
-  renderData(todo) {
+const  initTodo = { id: undefined, name: '', status: undefined }
+
+  const [todo, setTodo] = useState(initTodo)
+  const [todos, setTodos] = useState([initTodo])
+
+  const renderData = (todoParam) => {
     const response = todoApi.get();
-    this.setState({
-      ...this.state,
-      todos: response,
-      todo: todo ? todo : this.state.dodo
-    })
-  }
 
-  componentDidMount() {
-    this.renderData();
-  }
-
-  handleSaveTodo(todo) {
-    let oldTodo = this.state.dodo;
-
-    todoApi.save({ ...todo, status: todo.status ?? 0 })
-    if (todo.id === undefined) {
-      todo = { ...this.initTodo };
-    } 
     
-    //render list
-    this.renderData({ ...this.initTodo });
+    setTodos([
+      ...response
+    ])
   }
+    useEffect(() => {
+      renderData();
+    }, []);
 
-  handlePrepareEdit(todo) {
-    this.setState({
-      ...this.state,
-      todo: todo
-    })
-  }
 
-  handleDelete(id) {
-    todoApi.delete(id);
-    this.renderData();
-  }
+    const handleSaveTodo = (todo) => {
+      // let oldTodo = this.state.dodo;
 
-  render() {
-    // console.log(this.state);
-    return (
-      <div className='App'>
-        <div className='title'>Todo <strong>list</strong></div>
-        <div className='todo-list'>
-          <Form
-            handleSaveTodo={this.handleSaveTodo}
-            todo={this.state.todo || this.initTodo}
-            check={Math.random()}
-          />
-          <List
-            todos={this.state.todos}
-            handlePrepareEdit={this.handlePrepareEdit}
-            handleDelete={this.handleDelete}
-            handleSaveTodo={this.handleSaveTodo}
-          />
+      todoApi.save({ ...todo, status: todo.status ?? 0 })
+      if (todo.id === undefined) {
+        todo = { ...initTodo };
+      }
+
+      //render list
+      renderData({ ...initTodo });
+    }
+
+   const handlePrepareEdit = (todoParam) => {
+      setTodo({
+        ...todo,
+        ...todoParam
+      })
+    }
+
+   const handleDelete =(id) =>{
+      todoApi.delete(id);
+      renderData();
+    }
+
+      return (
+        <div className='App'>
+          <div className='title'>Todo <strong>list</strong></div>
+          <div className='todo-list'>
+            <Form
+              handleSaveTodo={handleSaveTodo}
+              todo={todo || initTodo}
+            />
+            <List
+              todos={todos}
+              handlePrepareEdit={handlePrepareEdit}
+              handleDelete={handleDelete}
+              handleSaveTodo={handleSaveTodo}
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
+    
   }
-}
-
-export default App;
+  export default App;
 
 
 
